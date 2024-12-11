@@ -13,6 +13,11 @@ URL:http://localhost:8080/api/pdf/generate
 
 Method: POST
 
+**Add header:** 
+key:Content-Type
+value:application/json
+
+
 **Request Body: JSON with invoice data**
 {
   "seller": "XYZ Pvt. Ltd.",
