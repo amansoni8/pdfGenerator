@@ -21,43 +21,6 @@ import com.itextpdf.html2pdf.HtmlConverter;
 @Service
 public class PdfGeneratorServiceImpl{
 
-	
-//	private final TemplateEngine templateEngine;
-//	@Autowired
-//	public PdfGeneratorServiceImpl(TemplateEngine templateEngine){
-//		this.templateEngine = templateEngine;
-//	}
-//	
-//
-//    public String generatePdf(InvoiceRequest request) throws  IOException {
-//        // Check if PDF already exists
-//        String pdfName = "invoice_" + request.hashCode() + ".pdf";
-//        File pdfFile = new File("invoices/" + pdfName);
-//        if (pdfFile.exists()) {
-//            return pdfFile.getAbsolutePath();
-//        }
-//
-//        Context context = new Context();
-//        context.setVariable("seller", request.getSeller());
-//        context.setVariable("sellerGstin", request.getSellerGstin());
-//        context.setVariable("sellerAddress", request.getSellerAddress());
-//        context.setVariable("buyer", request.getBuyer());
-//        context.setVariable("buyerGstin", request.getBuyerGstin());
-//        context.setVariable("buyerAddress", request.getBuyerAddress());
-//        context.setVariable("items", request.getItems());
-//
-//        String htmlContent = templateEngine.process("invoice-template", context);
-//
-//        // Generate PDF
-//        pdfFile.getParentFile().mkdirs();
-//        try (OutputStream os = new FileOutputStream(pdfFile)) {
-//            HtmlConverter.convertToPdf(htmlContent, os);
-//        }
-//        return pdfFile.getAbsolutePath();
-//    }
-//	
-//	
-	
 	 @Value("${pdf.storage.path:./pdfs/}")
 	    private String pdfStoragePath;
 
@@ -66,44 +29,6 @@ public class PdfGeneratorServiceImpl{
 	    public PdfGeneratorServiceImpl(TemplateEngine templateEngine) {
 	        this.templateEngine = templateEngine;
 	    }
-
-//	    public String generatePdf(InvoiceRequest request) {
-//	        try {
-//	            // Create storage directory if not exists
-//	            File storageDir = new File(pdfStoragePath);
-//	            if (!storageDir.exists()) {
-//	                 storageDir.mkdirs();
-//	            }
-//
-//	            // Use Thymeleaf template
-//	            Context context = new Context();
-//	            context.setVariable("seller", request.getSeller());
-//	            context.setVariable("sellerGstin", request.getSellerGstin());
-//	            context.setVariable("sellerAddress", request.getSellerAddress());
-//	            context.setVariable("buyer", request.getBuyer());
-//	            context.setVariable("buyerGstin", request.getBuyerGstin());
-//	            context.setVariable("buyerAddress", request.getBuyerAddress());
-//	            context.setVariable("items", request.getItems());
-//
-//	            String html = templateEngine.process("invoice", context);
-//
-//	            // Generate unique file name
-//	            String fileName = "invoice_" + request.hashCode() + ".pdf";
-//	            String filePath = pdfStoragePath + fileName;
-//
-//	            try (OutputStream os = new FileOutputStream(filePath)) {
-//	                ITextRenderer renderer = new ITextRenderer();
-//	                renderer.setDocumentFromString(html);
-//	                renderer.layout();
-//	                renderer.createPDF(os);
-//	            }
-//
-//	            return fileName;
-//	        } catch (Exception e) {
-//	            throw new RuntimeException("Error generating PDF", e);
-//	        }
-//
-//	    }
 	    
 	    public String generatePdf(InvoiceRequest request) {
 	        try {
@@ -152,15 +77,11 @@ public class PdfGeneratorServiceImpl{
 	        }
 	    }
 
-	    /**
-	     * Generates a unique hash for the given InvoiceRequest.
-	     */
 	    private String generateHash(InvoiceRequest request) throws NoSuchAlgorithmException {
-	        // Combine fields to create a unique string representation
+	        // Use fields that are likely to remain consistent
 	        String dataToHash = request.getSeller() + request.getSellerGstin() +
 	                            request.getSellerAddress() + request.getBuyer() +
-	                            request.getBuyerGstin() + request.getBuyerAddress() +
-	                            request.getItems().toString();
+	                            request.getBuyerGstin() + request.getBuyerAddress();
 
 	        // Use SHA-256 to generate a hash
 	        MessageDigest digest = MessageDigest.getInstance("SHA-256");
